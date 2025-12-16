@@ -1,43 +1,60 @@
-//TaskList Component
 export type TaskStatus = 'pending' | 'in-progress' | 'completed';
- 
+
 export interface Task {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   status: TaskStatus;
   priority: 'low' | 'medium' | 'high';
-  dueDate: string;
+  dueDate?: string; // ISO date string
+  createdAt: string; // ISO date string
+  tags?: string[];
+  archived?: boolean;
+  order?: number; // optional manual ordering index
 }
- 
+
+export interface TaskFormData {
+  title: string;
+  description?: string;
+  dueDate?: string;
+  priority: Task['priority'];
+  tags?: string[];
+}
+
+export interface TaskFilters {
+  status?: TaskStatus | 'all';
+  priority?: Task['priority'] | 'all';
+  searchQuery?: string;
+  sortBy?: 'createdAt' | 'dueDate' | 'priority' | 'title' | 'order';
+  sortDir?: 'asc' | 'desc';
+}
+
 export interface TaskListProps {
   tasks: Task[];
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
+  onEdit?: (task: Task) => void;
+  onReorder?: (orderedIds: string[]) => void;
 }
 
-//TaskItem Component
 export interface TaskItemProps {
   task: Task;
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
+  onEdit?: (task: Task) => void;
 }
 
-//TaskFilter Component
 export interface TaskFilterProps {
-  onFilterChange: (filters: {
-    status?: TaskStatus;
-    priority?: 'low' | 'medium' | 'high';
-  }) => void;
+  filters: TaskFilters;
+  onChange: (filters: TaskFilters) => void;
 }
 
-//TaskForm Component
 export interface TaskFormProps {
-  onSubmit: (task: Omit<Task, 'id'>) => void;
-  initialData?: Omit<Task, 'id'>;
+  onSubmit: (data: TaskFormData) => void;
+  initialData?: Partial<TaskFormData>;
+  onCancel?: () => void;
 }
 
-//Dashboard Component
 export interface DashboardProps {
-  tasks: Task[];
+  initialTasks?: Task[];
 }
