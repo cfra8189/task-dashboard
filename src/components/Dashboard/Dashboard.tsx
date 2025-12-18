@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import TaskForm from '../TaskForm/TaskForm';
 import TaskFilter from '../TaskFilter/TaskFilter';
 import TaskList from '../TaskList/TaskList';
+import CursorFollower from '../Shared/CursorFollower';
 import type { Task, TaskFormData, TaskFilters } from '../../types';
 import { filterTasks, sortTasks } from '../../utils/taskUtils';
 
@@ -163,6 +164,7 @@ export default function Dashboard() {
           </div>
 
           <TaskList tasks={visible} onStatusChange={toggleStatus} onDelete={deleteTask} onEdit={startEdit} onReorder={handleReorder} />
+          <CursorFollower activeDragging={false} />
         </main>
 
         <aside className="aside-area">
