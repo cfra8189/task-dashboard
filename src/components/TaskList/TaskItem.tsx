@@ -40,12 +40,13 @@ export default function TaskItem({ task, onStatusChange, onDelete, onEdit }: Pro
 
   return (
     <div ref={setNodeRef} style={style} className="task-card" {...attributes} {...safeListeners}>
-      <div className="task-row">
-        <div>
-          <strong>{task.title}</strong>
+      <div className="task-header">
+        <div className="task-title-and-meta">
+          <h3 className="task-title">{task.title}</h3>
           <div className="task-meta">{task.priority} • {task.status}</div>
         </div>
-        <div>
+
+        <div className="task-actions">
           <select
             value={task.status}
             onChange={(e) => onStatusChange(task.id, e.target.value as Task['status'])}
@@ -65,7 +66,7 @@ export default function TaskItem({ task, onStatusChange, onDelete, onEdit }: Pro
         </div>
       </div>
 
-      {task.description && <div className="task-desc">{task.description}</div>}
+      {task.description && <div className="task-body task-desc">{task.description}</div>}
       <div className="task-foot">
         Created: {formatDate(task.createdAt)} {task.dueDate ? ` • Due: ${formatDate(task.dueDate)}` : ''}
       </div>

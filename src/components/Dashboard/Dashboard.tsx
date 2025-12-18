@@ -112,9 +112,40 @@ export default function Dashboard() {
     return { total, completed, pending };
   }, [tasks]);
 
+  // Apply persisted theme on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') document.documentElement.classList.add('dark-mode');
+    else document.documentElement.classList.remove('dark-mode');
+  }, []);
+
+  // Controlled theme state to reflect the toggle UI
+  const [theme, setTheme] = useState<'light'|'dark'>(() => {
+    return (localStorage.getItem('theme') === 'dark') ? 'dark' : 'light';
+  });
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('theme', next);
+    if (next === 'dark') document.documentElement.classList.add('dark-mode');
+    else document.documentElement.classList.remove('dark-mode');
+  }
+
   return (
     <div className="app-container">
-      <h2>Task Dashboard</h2>
+      <div className="app-header">
+        <div className="app-logo">
+          <img src="/ltl-logo.PNG" alt="logo" />
+        </div>
+        <h2>Task Dashboard</h2>
+        <div>
+          <label className="theme-switch">
+            <input type="checkbox" checked={theme === 'dark'} onChange={toggleTheme} aria-label="Toggle dark mode" />
+            <span className="slider" />
+          </label>
+        </div>
+      </div>
 
       <div className="layout-grid">
         <main className="main-area">
