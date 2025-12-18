@@ -5,6 +5,8 @@
 
 A task management dashboard built with React + TypeScript (Vite) that helps users create, organize, and track tasks. Features include task CRUD, filtering, drag-and-drop reordering, local persistence, and a light/dark theme toggle.
 
+![Preview](public/preview.gif)
+
 ## Table of Contents
 
 - [Technologies Used](#technologiesused)
