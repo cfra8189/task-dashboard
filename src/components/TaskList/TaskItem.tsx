@@ -22,16 +22,15 @@ export default function TaskItem({ task, onStatusChange, onDelete, onEdit }: Pro
     if (typeof fn === 'function') fn(e);
   };
 
+  const listenersObj = listeners ?? {};
   const safeListeners: Record<string, any> = {};
-  Object.keys(listeners).forEach((k) => {
-    // @ts-ignore
-    safeListeners[k] = wrapListener((listeners as any)[k]);
+  Object.keys(listenersObj).forEach((k) => {
+    // listenersObj has function values; wrap them safely
+    // @ts-ignore - dnd-kit listener types are complex and we only forward them
+    const fn = (listenersObj as any)[k];
+    safeListeners[k] = wrapListener(fn);
   });
 
-  function handleToggle() {
-    const next = task.status === 'completed' ? 'pending' : 'completed';
-    onStatusChange(task.id, next);
-  }
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),

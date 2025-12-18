@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not required with the automatic JSX runtime; keep file lean
 import type { TaskFilters } from '../../types';
 
 interface Props {
