@@ -86,6 +86,16 @@ export default function Dashboard() {
     setTasks((t) => t.map((x) => (x.id === id ? { ...x, status: newStatus } : x)));
   }
 
+  function handleReorder(orderedIds: string[]) {
+    setTasks((prev) => {
+      const map = new Map(prev.map((t) => [t.id, t]));
+      const next = orderedIds.map((id) => map.get(id)).filter(Boolean) as Task[];
+      // append any tasks that weren't in the ordered list (safety)
+      const missing = prev.filter((t) => !orderedIds.includes(t.id));
+      return [...next, ...missing];
+    });
+  }
+
   // (Export/import removed — not required for the assignment.)
 
   // Compute visible tasks using the helpers
@@ -121,7 +131,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <TaskList tasks={visible} onStatusChange={toggleStatus} onDelete={deleteTask} onEdit={startEdit} />
+          <TaskList tasks={visible} onStatusChange={toggleStatus} onDelete={deleteTask} onEdit={startEdit} onReorder={handleReorder} />
         </main>
 
         <aside className="aside-area">

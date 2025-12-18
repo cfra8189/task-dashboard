@@ -1,6 +1,8 @@
 import React from 'react';
 import type { Task } from '../../types';
 import { formatDate } from '../../utils/taskUtils';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Props {
   task: Task;
@@ -11,13 +13,33 @@ interface Props {
 
 // A single task row/card. Simple and easy to read.
 export default function TaskItem({ task, onStatusChange, onDelete, onEdit }: Props) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: task.id });
+
+  // Wrap listeners so dragging doesn't start when interacting with inputs/buttons inside the card
+  const wrapListener = (fn?: (e: any) => void) => (e: any) => {
+    const target = e.target as HTMLElement | null;
+    if (target && target.closest && target.closest('button,input,select,textarea,a,label')) return;
+    if (typeof fn === 'function') fn(e);
+  };
+
+  const safeListeners: Record<string, any> = {};
+  Object.keys(listeners).forEach((k) => {
+    // @ts-ignore
+    safeListeners[k] = wrapListener((listeners as any)[k]);
+  });
+
   function handleToggle() {
     const next = task.status === 'completed' ? 'pending' : 'completed';
     onStatusChange(task.id, next);
   }
 
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
-    <div className="task-card">
+    <div ref={setNodeRef} style={style} className="task-card" {...attributes} {...safeListeners}>
       <div className="task-row">
         <div>
           <strong>{task.title}</strong>
