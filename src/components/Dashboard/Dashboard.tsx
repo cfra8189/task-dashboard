@@ -136,7 +136,7 @@ export default function Dashboard() {
     <div className="app-container">
       <div className="app-header">
         <div className="app-logo">
-          <img src="/ltl-logo.PNG" alt="logo" />
+          <img src={`${import.meta.env.BASE_URL}ltl-logo.PNG`} alt="logo" />
         </div>
         <h2>Task Dashboard</h2>
         <div>
