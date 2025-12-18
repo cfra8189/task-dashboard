@@ -1,73 +1,103 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Task Dashboard
 
-Currently, two official plugins are available:
+## Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A task management dashboard built with React + TypeScript (Vite) that helps users create, organize, and track tasks. Features include task CRUD, filtering, drag-and-drop reordering, local persistence, and a light/dark theme toggle.
 
-## React Compiler
+## Table of Contents
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [Technologies Used](#technologiesused)
+- [Features](#features)
+- [Future Features](#nextsteps)
+- [Deployed App](#deployment)
+- [About The Authors](#author)
 
-## Expanding the ESLint configuration
+## <a name="technologiesused"></a>Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React** - UI library for building components
+- **TypeScript** - Static typing for safer code
+- **Vite** - Fast development and build tooling
+- **@dnd-kit** - Drag-and-drop and sortable utilities
+- **CSS3** - Styling and theming with custom properties
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## <a name="features"></a> Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**Create / Edit / Delete** - Add new tasks, edit existing ones, and remove tasks easily.  
+**Drag-and-Drop Reordering** - Reorder tasks using a smooth drag-and-drop interface powered by `@dnd-kit`.  
+**Filtering & Search** - Filter by status/priority and search tasks by text.  
+**Persistent Storage** - Tasks are saved to `localStorage` so data persists across sessions.  
+**Theme Toggle** - Switch between light and dark themes.  
+**Responsive Design** - Works across desktop and smaller screens.  
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**In Progress:**
+
+- [ ] Accessibility improvements (focus states, keyboard DnD)
+
+## <a name="nextsteps"></a>Future Features
+
+- **User Accounts & Sync** - Persist tasks to a server and sync across devices.  
+- **Export / Import** - Export task lists to CSV/JSON and import them back.  
+- **Notifications & Reminders** - In-app reminders for due tasks.  
+- **Advanced Filters & Smart Lists** - Save custom filter views and smart lists.  
+
+## <a name="deployment"></a>Deployed Link
+
+**Live Application:**  
+https://cfra8189.github.io/task-dashboard/
+
+**Repository:**  
+https://github.com/cfra8189/task-dashboard
+
+## <a name="author"></a>About The Authors
+
+- **Clarence Franklin** — UI/UX Design & Frontend Development
+
+If you'd like additional contributors listed, provide their names and links and I will add them.
+
+## Development Process
+
+- Built iteratively using Vite dev server and feature-focused commits.  
+- Uses local testing with `npm run dev` and production builds with `npm run build`.
+
+## Installation & Setup
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/cfra8189/task-dashboard.git
+cd task-dashboard
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+3. Run the development server:
+
+```bash
+npm run dev
+```
+
+4. Build for production:
+
+```bash
+npm run build
+```
+
+5. Deploy options:
+
+- **GitHub Actions**: push to `main` (workflow included) and Pages will auto-deploy.  
+- **gh-pages**: use `npm run deploy` (project includes `predeploy` and `deploy` scripts).
+
+## Works Cited
+
+- React: https://reactjs.org/  
+- Vite: https://vitejs.dev/  
+- @dnd-kit: https://github.com/clauderic/dnd-kit  
+- MDN Web Docs: https://developer.mozilla.org/
+
+
+
