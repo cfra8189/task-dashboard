@@ -1,4 +1,4 @@
-import { Task, TaskFilters, TaskFormData } from '../types';
+import type { Task, TaskFilters, TaskFormData } from '../types';
 
 // Simple helper: check if a string is empty or only spaces
 const isBlank = (s?: string) => !s || s.trim().length === 0;
@@ -31,32 +31,48 @@ export function sortTasks(
   const copy = [...tasks];
 
   copy.sort((a, b) => {
-    let va: any = a[sortBy as keyof Task] as any;
-    let vb: any = b[sortBy as keyof Task] as any;
+    // Step 1: pick the raw values we will compare
+    let valueA: any = a[sortBy as keyof Task];
+    let valueB: any = b[sortBy as keyof Task];
 
-    // fallback: undefined order should go after defined ones
+    // Step 2: special case for manual ordering: handle missing order clearly
     if (sortBy === 'order') {
-      va = typeof va === 'number' ? va : Number.POSITIVE_INFINITY;
-      vb = typeof vb === 'number' ? vb : Number.POSITIVE_INFINITY;
+      const aHas = valueA != null;
+      const bHas = valueB != null;
+      // both missing -> equal
+      if (!aHas && !bHas) return 0;
+      // if A is missing, put A after B when ascending
+      if (!aHas) return sortDir === 'asc' ? 1 : -1;
+      // if B is missing, put B after A when ascending
+      if (!bHas) return sortDir === 'asc' ? -1 : 1;
+      // both have values -> compare as numbers
+      const na = Number(valueA);
+      const nb = Number(valueB);
+      return sortDir === 'asc' ? na - nb : nb - na;
     }
 
-    // Dates: compare timestamps
+    // Step 3: if we sort by dates, convert them to numbers (timestamps)
     if (sortBy === 'createdAt' || sortBy === 'dueDate') {
-      va = va ? Date.parse(String(va)) : 0;
-      vb = vb ? Date.parse(String(vb)) : 0;
+      valueA = valueA ? Date.parse(String(valueA)) : 0;
+      valueB = valueB ? Date.parse(String(valueB)) : 0;
     }
 
-    // Strings: compare lowercase
-    if (typeof va === 'string' && typeof vb === 'string') {
-      const cmp = va.toLowerCase().localeCompare(vb.toLowerCase());
+    // Step 4: compare as strings when either is a string
+    if (typeof valueA === 'string' || typeof valueB === 'string') {
+      const sa = String(valueA || '').toLowerCase();
+      const sb = String(valueB || '').toLowerCase();
+      const cmp = sa.localeCompare(sb);
       return sortDir === 'asc' ? cmp : -cmp;
     }
 
-    // Numbers
-    if (typeof va === 'number' && typeof vb === 'number') {
-      return sortDir === 'asc' ? va - vb : vb - va;
+    // Step 5: compare as numbers for any numeric-like values
+    if (typeof valueA === 'number' || typeof valueB === 'number') {
+      const na = Number(valueA || 0);
+      const nb = Number(valueB || 0);
+      return sortDir === 'asc' ? na - nb : nb - na;
     }
 
+    // If we can't tell, consider them equal
     return 0;
   });
 
@@ -94,26 +110,11 @@ export function formatDate(iso?: string): string {
 }
 
 // Export tasks to a JSON string (nice formatting).
-export function exportTasksJSON(tasks: Task[]): string {
-  return JSON.stringify(tasks, null, 2);
-}
-
-// Import tasks from JSON string. Throws an Error if parsing fails.
-export function importTasksJSON(json: string): Task[] {
-  const parsed = JSON.parse(json);
-  if (!Array.isArray(parsed)) throw new Error('Imported data must be an array of tasks.');
-  // Very small shape check to help beginners.
-  parsed.forEach((item, i) => {
-    if (!item.id || !item.title) throw new Error(`Task at index ${i} is missing required fields.`);
-  });
-  return parsed as Task[];
-}
+// (Export/import JSON helpers removed — not required for the assignment.)
 
 export default {
   filterTasks,
   sortTasks,
   validateTaskForm,
   formatDate,
-  exportTasksJSON,
-  importTasksJSON,
 };
